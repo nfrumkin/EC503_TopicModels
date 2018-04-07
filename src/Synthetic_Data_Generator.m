@@ -6,7 +6,7 @@ Ndoc: Total number of documents in the dataset
 Nterm_doc: Number of terms per document (can be a vector)
 %}
 
-function [doc,theta]=Synthetic_Data_Generator(lda_model, Ndoc, Nterm_doc, alpha)
+function [synthetic_doc,theta]=Synthetic_Data_Generator(lda_model, Ndoc, Nterm_doc, alpha)
 if ~exist('alpha','var')
     alpha=0.03*ones(1,lda_model.NumTopics);
 end
@@ -17,31 +17,36 @@ end
 
 Nvocabulary=size(lda_model.Vocabulary,2);
 
-doc=repmat({[' ']},Ndoc,1);
 
+%doc=cell([Ndoc max(Nterm_doc)]);
+synthetic_doc=zeros(Ndoc,Nvocabulary);
 for idoc=1:Ndoc
    
     theta(idoc,:)=drchrnd(alpha,1); %sample form dirchlet distribution
-    synthetic_doc=zeros(1,Nvocabulary);
+    
+    Nterm_topic_doc=mnrnd(Nterm_doc(idoc),theta(idoc,:));
     for iTopic=1:lda_model.NumTopics
-        Nterm_topic_doc=round(Nterm_doc(idoc)*theta(iTopic));
-        word_count=mnrnd(Nterm_topic_doc , lda_model.TopicWordProbabilities(:,iTopic));
-        synthetic_doc=synthetic_doc+word_count;
+        
+        %Nterm_topic_doc=round(Nterm_doc(idoc)*theta(iTopic));
+        word_count=mnrnd(Nterm_topic_doc(iTopic) , lda_model.TopicWordProbabilities(:,iTopic));
+        synthetic_doc(idoc,:)=synthetic_doc(idoc,:)+word_count;
     end     
     
     word_idx=find(any(synthetic_doc,1));
     
     
-    for i=1:length(word_idx)
-        repeat_times=synthetic_doc(word_idx);
-        for j=1:repeat_times
-            doc(idoc)=strcat( doc(idoc), {char(lda_model.Vocabulary(word_idx(i)))},{' '}  );
-        end
-    end
+%     count=1;
+%     for i=1:length(word_idx)
+%         repeat_times=synthetic_doc(word_idx);
+%         for j=1:repeat_times
+%             doc(idoc,count)= {char(lda_model.Vocabulary(word_idx(i)))};
+%             count=count+1;
+%         end
+%     end
     
 end
 
-doc=string(doc);
+
 
 end
 
