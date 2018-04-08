@@ -1,5 +1,8 @@
 %% Synthetic Data Generator
 %{
+Output: Bag of Word Matrix with the same WordID as the one on inputed lda_model
+
+
 Ntopic: Total number of topic in the dataset
 Nvocabulary: Total number of unqiue vocabulary in dataset
 Ndoc: Total number of documents in the dataset
@@ -17,8 +20,6 @@ end
 
 Nvocabulary=size(lda_model.Vocabulary,2);
 
-
-%doc=cell([Ndoc max(Nterm_doc)]);
 synthetic_doc=zeros(Ndoc,Nvocabulary);
 for idoc=1:Ndoc
    
@@ -26,8 +27,6 @@ for idoc=1:Ndoc
     
     Nterm_topic_doc=mnrnd(Nterm_doc(idoc),theta(idoc,:));
     for iTopic=1:lda_model.NumTopics
-        
-        %Nterm_topic_doc=round(Nterm_doc(idoc)*theta(iTopic));
         word_count=mnrnd(Nterm_topic_doc(iTopic) , lda_model.TopicWordProbabilities(:,iTopic));
         synthetic_doc(idoc,:)=synthetic_doc(idoc,:)+word_count;
     end     
@@ -35,21 +34,14 @@ for idoc=1:Ndoc
     word_idx=find(any(synthetic_doc,1));
     
     
-%     count=1;
-%     for i=1:length(word_idx)
-%         repeat_times=synthetic_doc(word_idx);
-%         for j=1:repeat_times
-%             doc(idoc,count)= {char(lda_model.Vocabulary(word_idx(i)))};
-%             count=count+1;
-%         end
-%     end
-    
 end
 
 
 
 end
 
+
+% https://cxwangyi.wordpress.com/2009/03/18/to-generate-random-numbers-from-a-dirichlet-distribution/
 function r = drchrnd(a,n)
 % take a sample from a dirichlet distribution
 p = length(a);
