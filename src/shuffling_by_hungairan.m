@@ -11,4 +11,12 @@ for iTopic=1:Ntopic
     beta_syn_reordered(:,iTopic)=beta_hat(:,assignment(iTopic));
     
 end
-    
+
+end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Hungarain Algorithm source:
+%    munkres
+%    https://www.mathworks.com/matlabcentral/fileexchange/20652-hungarian-algorithm-for-linear-assignment-problems--v2-3-
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
