@@ -1,4 +1,7 @@
 %% Synthetic Data Generator
+%Hung-Chen Yu
+% April. 16. 2018
+
 %{
 Output: Bag of Word Matrix with the same WordID as the one on inputed lda_model
 
@@ -21,8 +24,10 @@ end
 Nvocabulary=size(lda_model.Vocabulary,2);
 
 synthetic_doc=zeros(Ndoc,Nvocabulary);
+reverseStr=[];
 for idoc=1:Ndoc
-   
+    msg=sprintf('Generating Documents..... %d  / %d  \n', idoc,Ndoc);
+    fprintf([reverseStr,msg]);
     theta(idoc,:)=drchrnd(alpha,1); %sample form dirchlet distribution
     
     Nterm_topic_doc=mnrnd(Nterm_doc(idoc),theta(idoc,:));
@@ -33,7 +38,7 @@ for idoc=1:Ndoc
     
     word_idx=find(any(synthetic_doc,1));
     
-    
+    reverseStr = repmat(sprintf('\b'), 1, length(msg));
 end
 
 
