@@ -42,7 +42,7 @@ for idoc=1:Ndoc
 end
 
 
-
+    disp('--------------- Finish generating synthetic documents ---------------');
 end
 
 
